@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/xinayida/PluginDemo.svg)](https://jitpack.io/#xinayida/PluginDemo)
+[![Release](https://jitpack.io/v/xinayida/PluginDemo.svg)](https://jitpack.io/#xinayida/PluginDemo)
 # PluginDemo
 A demo for test publish lib/plugin to Jitpack
 
@@ -42,7 +42,7 @@ public class PluginImpl implements Plugin<Project> {
     }
 }
 ```
-然后在resources/META-INF/gradle-plugins目录下新建一个properties文件，==注意该文件的命名就是你之后使用插件的名字==，这里命名为==plugin.test==.properties，在里面输入
+然后在resources/META-INF/gradle-plugins目录下新建一个properties文件，**注意该文件的命名就是你之后使用插件的名字**，这里命名为**plugin.test**.properties，在里面输入
 
 `implementation-class=com.xinayida.plugin.PluginImpl`
 
@@ -71,7 +71,15 @@ buildscript {
     ```
 3. 在Github上创建一个release或添加一个tag
 
-#### 使用
+#### 检查
+检查在你的工程目录里是否有Gradle wrapper，如果没有的话可以用命令行`gradle wrapper`来创建。同时，也要看一下生成的gradle-wrapper.jar文件是否被.gitignore规则忽略掉。
+
+**测试:** 做好这些修改之后，退回到工程根目录，用命令行运行Gradle wrapper：
+`./gradlew install`
+这个指令会将你的库安装到本地的maven repository（$HOME/.m2/repository）中。加入安装成功，并且你已经增加了一个GitHub release，那么在jitpack.io就已经部署成功了。
+**重要:** 请在[这里](https://github.com/dcendents/android-maven-gradle-plugin#note-on-releases)检查与你的Gradle版本相匹配的android-maven版本.你的gradle版本是在gradle/wrapper/gradle-wrapper.properties文件中指定的。
+
+#### 安装
 
 1.在build文件中加入JitPack库
 ```
@@ -102,6 +110,18 @@ eg.
 `apply plugin: 'plugin.test'`
 这个名字就是之前在创建插件工程时，esources/META-INF/gradle-plugins目录下的properties文件名
 
+#### 增加示例
+
+如果在你的代码库中增加了一个例子应用，它就要依赖你的库。这就要在你的app/build.gradle文件中加入:
+```
+dependencies {
+    compile project(':library')
+}
+```
+‘library'即是你发布的库模块的名字
+
+### 其他
+默认情况下android-maven插件会将你的库编译成一个'aar'文件.如果你想生成一个'jar'文件的话，可以参考这个[例子](https://github.com/jitpack/android-example)工程中的library/build.gradle文件
 
 ### 参考文章
 [如何使用Android Studio开发Gradle插件](http://blog.csdn.net/sbsujjbcy/article/details/50782830)
